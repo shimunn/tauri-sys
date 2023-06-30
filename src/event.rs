@@ -41,8 +41,7 @@ pub struct Event<T> {
 /// @param event Event name. Must include only alphanumeric characters, `-`, `/`, `:` and `_`.
 #[inline(always)]
 pub async fn emit<T: Serialize>(event: &str, payload: &T) -> crate::Result<()> {
-    inner::emit(event, serde_wasm_bindgen::to_value(payload)?).await?;
-
+    inner::emit(event, payload.serialize(&serde_wasm_bindgen::Serializer::json_compatible())?).await?;
     Ok(())
 }
 
